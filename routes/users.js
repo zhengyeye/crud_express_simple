@@ -12,7 +12,7 @@ var db = require("./db.js");
  * 查询列表页
  */
 router.get('/', function (req, res, next) {
-    db.query('select * from userinfo', function (err, rows) {
+    db.query('select * from users', function (err, rows) {
         if (err) {
             res.render('users', {title: 'Express', datas: []});  // this renders "views/users.html"
         } else {
@@ -30,7 +30,7 @@ router.get('/add', function (req, res) {
 router.post('/add', function (req, res) {
     var name = req.body.name;
     var age = req.body.age;
-    db.query("insert into userinfo(name,age) values('" + name + "'," + age + ")", function (err, rows) {
+    db.query("insert into users(name,age) values('" + name + "'," + age + ")", function (err, rows) {
         if (err) {
             res.end('新增失败：' + err);
         } else {
@@ -44,7 +44,7 @@ router.post('/add', function (req, res) {
  */
 router.get('/del/:id', function (req, res) {
     var id = req.params.id;
-    db.query("delete from userinfo where id=" + id, function (err, rows) {
+    db.query("delete from users where id=" + id, function (err, rows) {
         if (err) {
             res.end('删除失败：' + err)
         } else {
@@ -57,7 +57,7 @@ router.get('/del/:id', function (req, res) {
  */
 router.get('/toUpdate/:id', function (req, res) {
     var id = req.params.id;
-    db.query("select * from userinfo where id=" + id, function (err, rows) {
+    db.query("select * from users where id=" + id, function (err, rows) {
         if (err) {
             res.end('修改页面跳转失败：' + err);
         } else {
@@ -69,7 +69,7 @@ router.post('/update', function (req, res) {
     var id = req.body.id;
     var name = req.body.name;
     var age = req.body.age;
-    db.query("update userinfo set name='" + name + "',age='" + age + "' where id=" + id, function (err, rows) {
+    db.query("update users set name='" + name + "',age='" + age + "' where id=" + id, function (err, rows) {
         if (err) {
             res.end('修改失败：' + err);
         } else {
@@ -84,12 +84,12 @@ router.post('/search', function (req, res) {
     var name = req.body.s_name;
     var age = req.body.s_age;
 
-    var sql = "select * from userinfo";
+    var sql = "select * from users";
 
-    if (name) {  //模糊查询：SELECT * from userinfo WHERE `name` like '%ye%'
+    if (name) {  //模糊查询：SELECT * from users WHERE `name` like '%ye%'
         sql += " and name like "+"'"+"%"+name+"%"+"'";
     }
-    if (age) {  //精确查询：select * from userinfo where age=22
+    if (age) {  //精确查询：select * from users where age=22
         sql += " and age=" + age + " ";
     }
     sql = sql.replace("and","where");
